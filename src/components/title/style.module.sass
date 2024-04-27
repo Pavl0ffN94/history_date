@@ -1,0 +1,19 @@
+.text__primery
+    grid-column: 1/2
+    grid-row: 2/3
+    width: 100%
+    text-align: left
+    position: relative
+    &::before
+        content: ""
+        position: absolute
+        top: 0
+        left: 0
+        width: 5px
+        height: 100%
+        background-image: linear-gradient(180deg, rgba(56,119,238,1) 0%, rgba(239,93,168,1) 51%)
+    &-text
+        font-size: 56px
+        font-weight: 700
+        line-height: 67px
+        margin-left: 78px
