@@ -1,4 +1,23 @@
-.circl
+.circle-container
     position: absolute
+    width: 40%
+    height: auto
     top: 20%
     left: 30%
+
+.point
+    fill: #42567A
+    cursor: pointer
+    transition: all 0.3s ease
+    &:hover
+        r: 2px
+        // fill: transparent
+        // border: 0.5px solid #42567A
+.clicked
+    r: 4px
+    fill: transparent
+    border: 0.5px solid #42567A
+
+.number
+    font-size: 8px
+    color: #42567A
