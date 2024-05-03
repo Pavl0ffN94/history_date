@@ -5,8 +5,6 @@ interface ICard {
 }
 
 export default function Card({title, desc}: ICard) {
-  console.log(desc);
-
   return (
     <div className={styles.card}>
       <h3>{title}</h3>

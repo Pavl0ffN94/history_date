@@ -1,13 +1,13 @@
 import styles from './style.module.sass';
 
-export function DateImpl() {
+export function DateImpl({start, end}) {
   return (
     <div className={styles['date_container']}>
       <div className={styles['date_container_left']}>
-        <span>2015</span>
+        <span>{start}</span>
       </div>
       <div className={styles['date_container_right']}>
-        <span>2022</span>
+        <span>{end}</span>
       </div>
     </div>
   );

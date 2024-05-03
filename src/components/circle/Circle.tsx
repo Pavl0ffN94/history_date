@@ -1,23 +1,33 @@
-import {useRef, useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
+import {gsap} from 'gsap';
 import styles from './style.module.sass';
 
-import gsap from 'gsap';
+interface CircleProps {
+  currentIndex: number;
+  updateIndex: (index: number) => void;
+}
 
-export function CircleIml() {
+export function CircleIml({currentIndex, updateIndex}: CircleProps) {
   const [clickedCircle, setClickedCircle] = useState(null);
-  const circleRef = useRef();
+  const circleRef = useRef(null);
   const circleNumber = ['1', '2', '3', '4'];
 
-  const handleClick = circleNumber => {
-    setClickedCircle(circleNumber);
+  const handleClick = circleNum => {
+    setClickedCircle(circleNum);
+    updateIndex(circleNum);
 
-    const angle = (360 / 4) * circleNumber + 215;
+    const angle = (360 / 4) * circleNum + 215;
     gsap.to(circleRef.current, {
       duration: 1,
       rotation: angle,
       transformOrigin: '50% 50%',
     });
   };
+
+  useEffect(() => {
+    setClickedCircle(currentIndex + 1);
+  }, [currentIndex, updateIndex]);
+
   return (
     <div className={styles['circle-container']}>
       <svg ref={circleRef} viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
@@ -62,3 +72,5 @@ export function CircleIml() {
     </div>
   );
 }
+
+export default CircleIml;
