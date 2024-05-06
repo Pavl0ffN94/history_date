@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {gsap} from 'gsap';
 import styles from './style.module.sass';
+import {DataSection, HISTORY_DATE} from '../../mockData';
 
 interface CircleProps {
   currentIndex: number;
@@ -10,24 +11,41 @@ interface CircleProps {
 export function CircleIml({currentIndex, updateIndex}: CircleProps) {
   const [clickedCircle, setClickedCircle] = useState(null);
   const circleRef = useRef(null);
-  const circleNumber = ['1', '2', '3', '4'];
 
-  const handleClick = circleNum => {
-    setClickedCircle(circleNum);
-    updateIndex(circleNum);
+  const points = HISTORY_DATE.map((section: DataSection, index: number) => {
+    const angle = (360 / HISTORY_DATE.length) * index + 90;
+    const x = 50 + Math.cos((angle * Math.PI) / 180) * 40;
+    const y = 50 + Math.sin((angle * Math.PI) / 180) * 40;
+    const textAnchor = angle > 270 || angle < 90 ? 'start' : 'end';
 
-    const angle = (360 / 4) * circleNum + 215;
+    return {
+      angle,
+      x,
+      y,
+      textAnchor,
+    };
+  });
+
+  useEffect(() => {
+    const angle = 215 - (360 / HISTORY_DATE.length) * currentIndex;
+    setClickedCircle(currentIndex);
+
+    gsap.to(circleRef.current, {
+      duration: 1,
+      rotation: angle,
+      transformOrigin: '50% 50%',
+    });
+  }, [currentIndex, updateIndex]);
+
+  const handleCircleClick = (index: number) => {
+    updateIndex(index);
+    const angle = 215 - (360 / HISTORY_DATE.length) * index;
     gsap.to(circleRef.current, {
       duration: 1,
       rotation: angle,
       transformOrigin: '50% 50%',
     });
   };
-
-  useEffect(() => {
-    setClickedCircle(currentIndex + 1);
-  }, [currentIndex, updateIndex]);
-
   return (
     <div className={styles['circle-container']}>
       <svg ref={circleRef} viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
@@ -40,30 +58,37 @@ export function CircleIml({currentIndex, updateIndex}: CircleProps) {
           strokeWidth='0.5'
         />
 
-        {circleNumber.map(circleNum => {
-          const x = [90, 50, 10, 50][circleNum - 1];
-          const y = [50, 10, 50, 90][circleNum - 1];
+        {points.map((point, index) => {
+          const {x, y, textAnchor} = point;
+
+          const isClicked = clickedCircle === index;
+          const className = isClicked
+            ? `${styles.point} ${styles.clicked}`
+            : styles.point;
+
+          const handleClick = () => handleCircleClick(index);
+
           return (
-            <g key={circleNum}>
+            <g key={index + 1}>
               <circle
-                className={`${styles.point} ${
-                  clickedCircle === circleNum ? styles.clicked : ''
-                }`}
+                className={className}
                 cx={`${x}%`}
                 cy={`${y}%`}
                 r='1'
                 fill='#fff'
                 stroke='#42567A'
                 strokeWidth='0.3'
-                onClick={() => handleClick(circleNum)}
+                onClick={handleClick}
               />
-              {clickedCircle === circleNum && (
+              {isClicked && (
                 <text
-                  x={`${x}%`}
-                  y={`${y}%`}
-                  textAnchor='middle'
+                  x={`${x + 5}%`}
+                  y={`${y + 5}%`}
+                  textAnchor={textAnchor}
                   dominantBaseline='middle'
-                  className={styles.number}></text>
+                  className={styles.number}>
+                  {/* <tspan dy='-0.35em'>{HISTORY_DATE[index].title}</tspan> */}
+                </text>
               )}
             </g>
           );

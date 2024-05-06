@@ -3,7 +3,7 @@ export type Fact = {
   desc: string;
 };
 
-interface DataSection {
+export interface DataSection {
   title: string;
   date: {
     start: number;

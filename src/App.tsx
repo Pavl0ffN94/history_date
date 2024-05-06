@@ -12,7 +12,7 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const final = HISTORY_DATE.length;
   const currentSecrion = HISTORY_DATE[currentIndex];
-  const {date, facts, title} = currentSecrion;
+  const {date, facts} = currentSecrion;
   const {start, end} = date;
 
   const updateCurrentIndex = useCallback(
