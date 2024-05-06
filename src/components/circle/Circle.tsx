@@ -1,18 +1,18 @@
-import React, {useState, useRef, useEffect} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import {gsap} from 'gsap';
 import styles from './style.module.sass';
 import {DataSection, HISTORY_DATE} from '../../mockData';
 
 interface CircleProps {
   currentIndex: number;
-  updateIndex: (index: number) => void;
+  updateIndex: (increment: boolean) => void;
 }
 
 export function CircleIml({currentIndex, updateIndex}: CircleProps) {
-  const [clickedCircle, setClickedCircle] = useState(null);
-  const circleRef = useRef(null);
+  const [clickedCircle, setClickedCircle] = useState<number | null>(null);
+  const circleRef = useRef<SVGSVGElement | null>(null);
 
-  const points = HISTORY_DATE.map((section: DataSection, index: number) => {
+  const points = HISTORY_DATE.map((_section: DataSection, index: number) => {
     const angle = (360 / HISTORY_DATE.length) * index + 90;
     const x = 50 + Math.cos((angle * Math.PI) / 180) * 40;
     const y = 50 + Math.sin((angle * Math.PI) / 180) * 40;
@@ -26,6 +26,16 @@ export function CircleIml({currentIndex, updateIndex}: CircleProps) {
     };
   });
 
+  const handleCircleClick = (index: number) => {
+    updateIndex(true);
+    const angle = 215 - (360 / HISTORY_DATE.length) * index;
+    gsap.to(circleRef.current, {
+      duration: 1,
+      rotation: angle,
+      transformOrigin: '50% 50%',
+    });
+  };
+
   useEffect(() => {
     const angle = 215 - (360 / HISTORY_DATE.length) * currentIndex;
     setClickedCircle(currentIndex);
@@ -35,17 +45,7 @@ export function CircleIml({currentIndex, updateIndex}: CircleProps) {
       rotation: angle,
       transformOrigin: '50% 50%',
     });
-  }, [currentIndex, updateIndex]);
-
-  const handleCircleClick = (index: number) => {
-    updateIndex(index);
-    const angle = 215 - (360 / HISTORY_DATE.length) * index;
-    gsap.to(circleRef.current, {
-      duration: 1,
-      rotation: angle,
-      transformOrigin: '50% 50%',
-    });
-  };
+  }, [currentIndex]);
   return (
     <div className={styles['circle-container']}>
       <svg ref={circleRef} viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>

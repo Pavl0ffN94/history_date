@@ -1,6 +1,9 @@
 import styles from './style.module.sass';
-
-export function DateImpl({start, end}) {
+interface Iprops {
+  start: number;
+  end: number;
+}
+export function DateImpl({start, end}: Iprops) {
   return (
     <div className={styles['date_container']}>
       <div className={styles['date_container_left']}>
